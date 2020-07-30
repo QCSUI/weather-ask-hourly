@@ -14,21 +14,27 @@ function App() {
   const [forecast,setForecast] = useState({});
   const search = evt => {
     if (evt.key === "Enter") {
-      fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
+      fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)  // fetch the current weather
         .then(res => res.json())
         .then(result => {
           setWeather(result);
           setQuery('');
           console.log(result);
         })
-        .then(fetch(`${api.base}forecast?q=${query}&units=metric&APPID=${api.key}`)
+        .then(fetch(`${api.base}forecast?q=${query}&units=metric&APPID=${api.key}`)  // fetch the weather forecast in the next 5 days 
                 .then(res => res.json())
                 .then(result => setForecast(result))
               )
-        .catch(err=>{console.error(err)});
+        .catch(err=>{console.error(err)}); 
     }
   }
-
+  /**
+   * Change the date format to display
+   *
+   * @param d  A Date() obj 
+   *
+   * @return {string} Eurpeam format of time
+   */
   const dateBuilder = (d) => {
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -40,7 +46,7 @@ function App() {
 
     return `${day} ${date} ${month} ${year}`
   }
-
+  
   return (
     <div className={(typeof weather.main != "undefined") ? ((weather.main.temp > 16) ? 'app warm' : 'app') : 'app'}>
       <main>

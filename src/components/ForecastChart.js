@@ -3,13 +3,13 @@ import React from 'react'
 import arrowIcon from '../assets/flag.svg'
 
 
-
+/**
+ * Draws the chart which displays the forecast
+ * @param {Array} props contains the forecast data fetched 
+ * @return {JSX>} the JSX codes for drawing the charts
+ */
 const ForecastChart = (props)=>{
-  //A Functional Component to draw the chart 
-  // Params : prop Propreties
-
-  //console.log(props);
-  let weatherArrayToPlot = {
+  let weatherArrayToPlot = {  // Creates the empty 
     cityName:"",
     dt_txt : [],
     temperatureDegreArray:[],
@@ -17,10 +17,10 @@ const ForecastChart = (props)=>{
     humidityPercentArray:[],
     windSpeedMpsArray:[],
     windDirectionDegreArray:[],
-    precipitationMMArray:[],//Not included in the 
+    precipitationMMArray:[],
   }
   console.log(props.data);
-  for(var i in props.data.list){
+  for(var i in props.data.list){  // Parses the data, select the data of interest for charts
     weatherArrayToPlot.temperatureDegreArray.push(props.data.list[i].main.temp);
     weatherArrayToPlot.pressurePascalArray.push(props.data.list[i].main.pressure);
     weatherArrayToPlot.humidityPercentArray.push(props.data.list[i].main.humidity);
@@ -30,12 +30,14 @@ const ForecastChart = (props)=>{
     weatherArrayToPlot.precipitationMMArray.push(props.data.list[i].rain===undefined?0:props.data.list[i].rain["3h"]);
   };
   console.log(weatherArrayToPlot);
-
-  const chartPoint = new Image();
+  
+  const chartPoint = new Image();  // Gets the wind arrow icon for the display of wind direction 
   chartPoint.src = arrowIcon;
   chartPoint.width = 50;
   chartPoint.height = 50;
 
+
+  //the data and options for drawing the charts
   const temperatureHumidityPrecipitationData = {
     labels: weatherArrayToPlot.dt_txt,
     datasets: [
@@ -71,7 +73,6 @@ const ForecastChart = (props)=>{
       }
     ]
   }
-
   const temperatureHumidityPrecipitationOptions = {
     title: {
       display: false,
@@ -120,6 +121,7 @@ const ForecastChart = (props)=>{
       }
     }
   }
+
   const pressureData = {
     labels: weatherArrayToPlot.dt_txt,
     datasets: [
@@ -173,8 +175,6 @@ const ForecastChart = (props)=>{
       }
     ]
   }
-
-
   const windOptions = {
     title: {
       display: false,
@@ -209,12 +209,15 @@ const ForecastChart = (props)=>{
     }
     
   }
-
-  function windDirection(context )
+  /**
+   * Costumize the pointStyle icon to display the wind direction
+   * @param {TYPE} the current context of Chart data
+   * @return {var} the deg to turn the wind icon
+   */
+  function windDirection(context)
   {
     return weatherArrayToPlot.windDirectionDegreArray[context.dataIndex];
   }
-
 
   return <div>
           <Bar data={temperatureHumidityPrecipitationData} options={temperatureHumidityPrecipitationOptions} />
@@ -222,7 +225,6 @@ const ForecastChart = (props)=>{
           <Line data={windData} options={windOptions} />
         </div>
 }
-
 
 export default ForecastChart
 
